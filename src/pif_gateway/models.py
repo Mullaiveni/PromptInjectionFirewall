@@ -52,6 +52,10 @@ class Capabilities(BaseModel):
     network: bool = False
     memory_write: bool = False
     secret_access: bool = False
+    requested_tools: list[str] = Field(default_factory=list)
+    network_requested: bool = False
+    memory_write_requested: bool = False
+    secret_access_requested: bool = False
 
 
 class PolicyDecision(BaseModel):
@@ -81,4 +85,3 @@ class ToolAuthorizationResult(BaseModel):
     allowed: bool
     reason_code: str
     requires_approval: bool = False
-

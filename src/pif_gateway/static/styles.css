@@ -581,6 +581,61 @@ textarea::placeholder {
   border-top: 1px solid var(--line);
 }
 
+.capability-request {
+  padding: 14px 0 18px;
+  border-top: 1px solid var(--line);
+}
+
+.capability-request-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 11px;
+}
+
+.capability-request-heading .field-label {
+  margin: 0 0 4px;
+}
+
+.capability-request-heading strong {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.capability-request-heading small {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.capability-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+
+.capability-options label {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 9px;
+}
+
+.capability-options label:has(input:checked) {
+  border-color: rgba(77, 226, 168, 0.35);
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.capability-options input {
+  accent-color: var(--green);
+}
+
 .trust-row .field-label {
   margin: 0 0 4px;
 }
@@ -1194,6 +1249,15 @@ footer {
 
   .capability-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .capability-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .capability-request-heading {
+    gap: 8px;
+    flex-direction: column;
   }
 
   .pipeline {

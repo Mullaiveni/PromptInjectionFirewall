@@ -67,6 +67,10 @@ def create_app(
     async def inspect_content(
         file: UploadFile = File(...),
         source_trust: str = Form("external_untrusted"),
+        requested_tools: str = Form(""),
+        network_requested: bool = Form(False),
+        memory_write_requested: bool = Form(False),
+        secret_access_requested: bool = Form(False),
     ) -> InspectionResult:
         data = await file.read(effective_settings.max_document_bytes + 1)
         if len(data) > effective_settings.max_document_bytes:
@@ -82,7 +86,19 @@ def create_app(
         for segment in segments:
             segment.trust = source_trust
         findings = inspect_segments(segments, effective_settings)
-        decision = evaluate_policy(segments, findings, effective_settings)
+        decision = evaluate_policy(
+            segments,
+            findings,
+            effective_settings,
+            requested_tools=[
+                tool.strip()
+                for tool in requested_tools.split(",")
+                if tool.strip()
+            ],
+            network_requested=network_requested,
+            memory_write_requested=memory_write_requested,
+            secret_access_requested=secret_access_requested,
+        )
         return InspectionResult(
             request_id=f"req-{uuid.uuid4().hex}",
             decision=decision,
@@ -95,11 +111,33 @@ def create_app(
         text = payload.get("text")
         if not isinstance(text, str):
             raise HTTPException(status_code=422, detail="text must be a string.")
+        requested_capabilities = payload.get("requested_capabilities", {})
+        if not isinstance(requested_capabilities, dict):
+            raise HTTPException(
+                status_code=422,
+                detail="requested_capabilities must be an object.",
+            )
+        requested_tools = requested_capabilities.get("tools", [])
+        if not isinstance(requested_tools, list) or not all(
+            isinstance(tool, str) for tool in requested_tools
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail="requested_capabilities.tools must be an array of strings.",
+            )
         return inspect_text(
             text,
             effective_settings,
             source=str(payload.get("source", "user_message")),
             trust=str(payload.get("trust", "external_untrusted")),
+            requested_tools=requested_tools,
+            network_requested=bool(requested_capabilities.get("network", False)),
+            memory_write_requested=bool(
+                requested_capabilities.get("memory_write", False)
+            ),
+            secret_access_requested=bool(
+                requested_capabilities.get("secret_access", False)
+            ),
         )
 
     @app.post("/v1/tools/authorize", response_model=ToolAuthorizationResult)

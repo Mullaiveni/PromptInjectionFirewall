@@ -1,0 +1,108 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Sentinel home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e8]:
+        - strong [ref=e9]: Sentinel
+        - generic [ref=e10]: Prompt Injection Firewall
+    - generic [ref=e11]:
+      - generic [ref=e13]: Gateway online
+      - generic [ref=e14]: v0.1
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e17]: Interactive security lab
+      - heading [level=1] [ref=e19]:
+        - text: Inspect content before
+        - emphasis [ref=e20]: AI trusts it.
+      - paragraph [ref=e21]: Send messages, code, documents, or images through a zero-trust inspection pipeline. See exactly what is detected, neutralized, and allowed.
+      - generic "Supported capabilities" [ref=e22]:
+        - generic [ref=e23]:
+          - strong [ref=e24]: "10"
+          - generic [ref=e25]: Threat classes
+        - generic [ref=e26]:
+          - strong [ref=e27]: 9+
+          - generic [ref=e28]: Input formats
+        - generic [ref=e29]:
+          - strong [ref=e30]: "4"
+          - generic [ref=e31]: Policy actions
+    - region "Firewall demonstration" [ref=e32]:
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]: 01 · Input
+            - heading "Content intake" [level=2] [ref=e37]
+          - button "Clear" [ref=e38] [cursor=pointer]
+        - tablist "Input type" [ref=e39]:
+          - tab "Message" [selected] [ref=e40] [cursor=pointer]
+          - tab "HTML" [ref=e41] [cursor=pointer]
+          - tab "Markdown" [ref=e42] [cursor=pointer]
+          - tab "API / JSON" [ref=e43] [cursor=pointer]
+          - tab "Code" [ref=e44] [cursor=pointer]
+          - tab "Upload" [ref=e45] [cursor=pointer]
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e48]:
+              - generic [ref=e53]: user-message.txt
+              - generic [ref=e54]: 0 chars
+            - textbox "Content to inspect" [ref=e55]:
+              - /placeholder: Paste a user message or untrusted content here...
+          - generic [ref=e56]:
+            - generic [ref=e57]: Try a scenario
+            - generic [ref=e58]:
+              - button "Benign request" [ref=e59] [cursor=pointer]
+              - button "Instruction override" [ref=e60] [cursor=pointer]
+              - button "Secret extraction" [ref=e61] [cursor=pointer]
+              - button "Tool abuse" [ref=e62] [cursor=pointer]
+              - button "Encoded attack" [ref=e63] [cursor=pointer]
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - generic [ref=e66]: Content provenance
+            - strong [ref=e67]: Authenticated user instruction
+          - combobox "Content provenance" [ref=e68]:
+            - option "Authenticated user" [selected]
+            - option "External / untrusted"
+            - option "Verified internal"
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - generic [ref=e72]: Workflow capabilities
+              - strong [ref=e73]: Request access for this inspection
+            - generic [ref=e74]: Server policy remains authoritative
+          - generic [ref=e75]:
+            - generic [ref=e76] [cursor=pointer]:
+              - checkbox "Search tool" [ref=e77]
+              - generic [ref=e78]: Search tool
+            - generic [ref=e79] [cursor=pointer]:
+              - checkbox "Network" [ref=e80]
+              - generic [ref=e81]: Network
+            - generic [ref=e82] [cursor=pointer]:
+              - checkbox "Memory write" [ref=e83]
+              - generic [ref=e84]: Memory write
+            - generic [ref=e85] [cursor=pointer]:
+              - checkbox "Secret access" [ref=e86]
+              - generic [ref=e87]: Secret access
+        - button "Run firewall inspection" [ref=e88] [cursor=pointer]
+      - generic [ref=e93]:
+        - generic [ref=e94]:
+          - generic [ref=e95]:
+            - generic [ref=e96]: 02 · Decision
+            - heading "Firewall response" [level=2] [ref=e97]
+          - generic [ref=e98]: Awaiting inspection
+        - generic [ref=e99]:
+          - heading "Ready to inspect" [level=3] [ref=e107]
+          - paragraph [ref=e108]: Choose an input type and submit content to visualize the firewall decision.
+    - region "Supported formats" [ref=e109]:
+      - generic [ref=e110]: Built for untrusted content from
+      - generic [ref=e111]:
+        - generic [ref=e112]: MSG
+        - generic [ref=e113]: HTML
+        - generic [ref=e114]: MD
+        - generic [ref=e115]: JSON
+        - generic [ref=e116]: CODE
+        - generic [ref=e117]: PDF
+        - generic [ref=e118]: DOCX
+        - generic [ref=e119]: EMAIL
+        - generic [ref=e120]: OCR
+  - contentinfo [ref=e121]:
+    - generic [ref=e122]: Zero-trust content inspection
+    - generic [ref=e123]: Detection is probabilistic. Enforcement is deterministic.

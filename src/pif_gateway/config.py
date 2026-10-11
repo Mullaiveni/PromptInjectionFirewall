@@ -13,9 +13,19 @@ class Settings:
     max_decoded_bytes: int
     max_decode_depth: int
     allowed_tools: frozenset[str]
+    allow_network: bool
+    allow_memory_write: bool
+    allow_secret_access: bool
     block_threshold: float
     constrain_threshold: float
     system_prompt_canary: str | None
+
+    @staticmethod
+    def _env_flag(name: str, default: bool = False) -> bool:
+        value = os.getenv(name)
+        if value is None:
+            return default
+        return value.strip().lower() in {"1", "true", "yes", "on"}
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -32,8 +42,10 @@ class Settings:
             max_decoded_bytes=int(os.getenv("PIF_MAX_DECODED_BYTES", str(256 * 1024))),
             max_decode_depth=int(os.getenv("PIF_MAX_DECODE_DEPTH", "2")),
             allowed_tools=frozenset(tools),
+            allow_network=cls._env_flag("PIF_ALLOW_NETWORK"),
+            allow_memory_write=cls._env_flag("PIF_ALLOW_MEMORY_WRITE"),
+            allow_secret_access=cls._env_flag("PIF_ALLOW_SECRET_ACCESS"),
             block_threshold=float(os.getenv("PIF_BLOCK_THRESHOLD", "0.9")),
             constrain_threshold=float(os.getenv("PIF_CONSTRAIN_THRESHOLD", "0.55")),
             system_prompt_canary=os.getenv("PIF_SYSTEM_PROMPT_CANARY"),
         )
-

@@ -67,7 +67,7 @@
             <button class="mode-tab active" data-mode="message" role="tab" aria-selected="true">
               Message
             </button>
-            <button class="mode-tab" data-mode="html" role="tab" aria-selected="false">
+            <!-- <button class="mode-tab" data-mode="html" role="tab" aria-selected="false">
               HTML
             </button>
             <button class="mode-tab" data-mode="markdown" role="tab" aria-selected="false">
@@ -78,7 +78,7 @@
             </button>
             <button class="mode-tab" data-mode="source_code" role="tab" aria-selected="false">
               Code
-            </button>
+            </button> -->
             <button class="mode-tab" data-mode="file" role="tab" aria-selected="false">
               Upload
             </button>
@@ -148,6 +148,34 @@
               <option value="external_untrusted">External / untrusted</option>
               <option value="verified_internal_data">Verified internal</option>
             </select>
+          </div>
+
+          <div class="capability-request">
+            <div class="capability-request-heading">
+              <div>
+                <span class="field-label">Workflow capabilities</span>
+                <strong>Request access for this inspection</strong>
+              </div>
+              <small>Server policy remains authoritative</small>
+            </div>
+            <div class="capability-options">
+              <label>
+                <input id="request-tool" type="checkbox">
+                <span>Search tool</span>
+              </label>
+              <label>
+                <input id="request-network" type="checkbox">
+                <span>Network</span>
+              </label>
+              <label>
+                <input id="request-memory" type="checkbox">
+                <span>Memory write</span>
+              </label>
+              <label>
+                <input id="request-secrets" type="checkbox">
+                <span>Secret access</span>
+              </label>
+            </div>
           </div>
 
           <button class="inspect-button" id="inspect-button" type="button">
@@ -228,19 +256,19 @@
             <div class="capability-grid">
               <div class="capability">
                 <span class="capability-icon">⌘</span>
-                <div><small>Tools</small><strong id="cap-tools">Disabled</strong></div>
+                <div><small>Tools</small><strong id="cap-tools">Not requested</strong></div>
               </div>
               <div class="capability">
                 <span class="capability-icon">◎</span>
-                <div><small>Network</small><strong id="cap-network">Blocked</strong></div>
+                <div><small>Network</small><strong id="cap-network">Not requested</strong></div>
               </div>
               <div class="capability">
                 <span class="capability-icon">◇</span>
-                <div><small>Memory write</small><strong id="cap-memory">Blocked</strong></div>
+                <div><small>Memory write</small><strong id="cap-memory">Not requested</strong></div>
               </div>
               <div class="capability">
                 <span class="capability-icon">◈</span>
-                <div><small>Secret access</small><strong id="cap-secrets">Blocked</strong></div>
+                <div><small>Secret access</small><strong id="cap-secrets">Not requested</strong></div>
               </div>
             </div>
 

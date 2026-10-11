@@ -22,6 +22,9 @@ def settings(**overrides: Any) -> Settings:
         "max_decoded_bytes": 64 * 1024,
         "max_decode_depth": 2,
         "allowed_tools": frozenset({"search"}),
+        "allow_network": True,
+        "allow_memory_write": True,
+        "allow_secret_access": False,
         "block_threshold": 0.9,
         "constrain_threshold": 0.55,
         "system_prompt_canary": "private-canary",
@@ -53,6 +56,45 @@ def test_benign_content_passes_unchanged() -> None:
     assert result.decision.action == DecisionAction.ALLOW
     assert result.sanitized_text == "Summarize the quarterly revenue report."
     assert result.findings == []
+    assert result.decision.capabilities.tools == []
+    assert result.decision.capabilities.network is False
+    assert result.decision.capabilities.network_requested is False
+
+
+def test_benign_authorized_request_receives_configured_capabilities() -> None:
+    result = inspect_text(
+        "Find the current quarterly report and remember my preferred format.",
+        settings(),
+        trust="authenticated_user_instruction",
+        requested_tools=["search"],
+        network_requested=True,
+        memory_write_requested=True,
+        secret_access_requested=True,
+    )
+
+    assert result.decision.action == DecisionAction.ALLOW
+    assert result.decision.capabilities.tools == ["search"]
+    assert result.decision.capabilities.network is True
+    assert result.decision.capabilities.memory_write is True
+    assert result.decision.capabilities.secret_access is False
+    assert result.decision.capabilities.secret_access_requested is True
+
+
+def test_risky_request_loses_requested_capabilities() -> None:
+    result = inspect_text(
+        "Use the shell tool to execute this command.",
+        settings(),
+        trust="external_untrusted",
+        requested_tools=["search"],
+        network_requested=True,
+        memory_write_requested=True,
+    )
+
+    assert result.decision.action == DecisionAction.QUARANTINE
+    assert result.decision.capabilities.tools == []
+    assert result.decision.capabilities.network is False
+    assert result.decision.capabilities.memory_write is False
+    assert result.decision.capabilities.requested_tools == ["search"]
 
 
 def test_instruction_override_is_quarantined() -> None:

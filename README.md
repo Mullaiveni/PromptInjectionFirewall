@@ -43,6 +43,8 @@ python -m pip install -e ".[dev]"
 $env:PIF_UPSTREAM_BASE_URL = "https://your-openai-compatible-endpoint"
 $env:PIF_UPSTREAM_API_KEY = "your-provider-key"
 $env:PIF_ALLOWED_TOOLS = "search,read_document"
+$env:PIF_ALLOW_NETWORK = "true"
+$env:PIF_ALLOW_MEMORY_WRITE = "true"
 uvicorn pif_gateway.app:app --host 127.0.0.1 --port 8080
 ```
 
@@ -136,6 +138,9 @@ The gateway authorizes but does not execute tools. The application must call thi
 | `PIF_UPSTREAM_BASE_URL` | unset | OpenAI-compatible provider base URL |
 | `PIF_UPSTREAM_API_KEY` | unset | Provider credential held only by the gateway |
 | `PIF_ALLOWED_TOOLS` | empty | Comma-separated tool allowlist |
+| `PIF_ALLOW_NETWORK` | `false` | Permit explicitly requested network access on low-risk requests |
+| `PIF_ALLOW_MEMORY_WRITE` | `false` | Permit explicitly requested memory writes on low-risk requests |
+| `PIF_ALLOW_SECRET_ACCESS` | `false` | Permit explicitly requested secret access; keep disabled unless strictly required |
 | `PIF_BLOCK_THRESHOLD` | `0.9` | Confidence that blocks a request |
 | `PIF_CONSTRAIN_THRESHOLD` | `0.55` | Confidence that quarantines content and disables tools |
 | `PIF_MAX_DOCUMENT_BYTES` | `10485760` | Maximum uploaded document size |

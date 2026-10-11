@@ -186,6 +186,10 @@ def inspect_text(
     settings: Settings,
     source: str = "user_message",
     trust: str = "external_untrusted",
+    requested_tools: list[str] | None = None,
+    network_requested: bool = False,
+    memory_write_requested: bool = False,
+    secret_access_requested: bool = False,
 ) -> InspectionResult:
     request_id = f"req-{uuid.uuid4().hex}"
     segment = Segment(
@@ -195,7 +199,15 @@ def inspect_text(
         trust=trust,
     )
     findings = inspect_segments([segment], settings)
-    decision = evaluate_policy([segment], findings, settings)
+    decision = evaluate_policy(
+        [segment],
+        findings,
+        settings,
+        requested_tools=requested_tools,
+        network_requested=network_requested,
+        memory_write_requested=memory_write_requested,
+        secret_access_requested=secret_access_requested,
+    )
     return InspectionResult(
         request_id=request_id,
         decision=decision,

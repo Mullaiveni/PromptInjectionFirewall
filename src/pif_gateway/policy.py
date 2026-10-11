@@ -21,6 +21,9 @@ def evaluate_policy(
     findings: list[Finding],
     settings: Settings,
     requested_tools: list[str] | None = None,
+    network_requested: bool = False,
+    memory_write_requested: bool = False,
+    secret_access_requested: bool = False,
 ) -> PolicyDecision:
     operational = [finding for finding in findings if finding.operational]
     maximum = max((finding.confidence for finding in operational), default=0.0)
@@ -61,9 +64,21 @@ def evaluate_policy(
     }
     capabilities = Capabilities(
         tools=allowed_requested_tools if can_use_tools else [],
-        network=bool(allowed_requested_tools) and can_use_tools,
-        memory_write=False,
-        secret_access=False,
+        network=network_requested and settings.allow_network and can_use_tools,
+        memory_write=(
+            memory_write_requested
+            and settings.allow_memory_write
+            and can_use_tools
+        ),
+        secret_access=(
+            secret_access_requested
+            and settings.allow_secret_access
+            and can_use_tools
+        ),
+        requested_tools=requested_tools or [],
+        network_requested=network_requested,
+        memory_write_requested=memory_write_requested,
+        secret_access_requested=secret_access_requested,
     )
     return PolicyDecision(
         action=action,

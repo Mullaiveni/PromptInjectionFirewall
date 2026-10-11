@@ -4,26 +4,26 @@ const modes = {
     placeholder: "Paste a user message or untrusted content here...",
     trust: "authenticated_user_instruction",
   },
-  html: {
-    label: "external-content.html",
-    placeholder: "<main>Paste HTML, including comments and hidden instructions...</main>",
-    trust: "external_untrusted",
-  },
-  markdown: {
-    label: "retrieved-document.md",
-    placeholder: "# Paste Markdown from a document, email, or retrieval result...",
-    trust: "external_untrusted",
-  },
-  api_response: {
-    label: "api-response.json",
-    placeholder: '{"result": "Paste an untrusted API response here"}',
-    trust: "external_untrusted",
-  },
-  source_code: {
-    label: "repository-source.py",
-    placeholder: "# Paste source code, comments, configuration, or generated code...",
-    trust: "external_untrusted",
-  },
+  // html: {
+  //   label: "external-content.html",
+  //   placeholder: "<main>Paste HTML, including comments and hidden instructions...</main>",
+  //   trust: "external_untrusted",
+  // },
+  // markdown: {
+  //   label: "retrieved-document.md",
+  //   placeholder: "# Paste Markdown from a document, email, or retrieval result...",
+  //   trust: "external_untrusted",
+  // },
+  // api_response: {
+  //   label: "api-response.json",
+  //   placeholder: '{"result": "Paste an untrusted API response here"}',
+  //   trust: "external_untrusted",
+  // },
+  // source_code: {
+  //   label: "repository-source.py",
+  //   placeholder: "# Paste source code, comments, configuration, or generated code...",
+  //   trust: "external_untrusted",
+  // },
 };
 
 const samples = {
@@ -104,6 +104,10 @@ const elements = {
   capNetwork: document.querySelector("#cap-network"),
   capMemory: document.querySelector("#cap-memory"),
   capSecrets: document.querySelector("#cap-secrets"),
+  requestTool: document.querySelector("#request-tool"),
+  requestNetwork: document.querySelector("#request-network"),
+  requestMemory: document.querySelector("#request-memory"),
+  requestSecrets: document.querySelector("#request-secrets"),
 };
 
 let currentMode = "message";
@@ -234,13 +238,36 @@ function renderFindings(findings) {
   });
 }
 
-function renderCapabilities(capabilities) {
+function capabilityStatus(requested, allowed, securityBlocked) {
+  if (!requested) return "Not requested";
+  if (allowed) return "Allowed";
+  return securityBlocked ? "Blocked by risk" : "Denied by policy";
+}
+
+function renderCapabilities(capabilities, action) {
+  const securityBlocked = action === "block" || action === "quarantine";
   elements.capTools.textContent = capabilities.tools.length
     ? capabilities.tools.join(", ")
-    : "Disabled";
-  elements.capNetwork.textContent = capabilities.network ? "Allowed" : "Blocked";
-  elements.capMemory.textContent = capabilities.memory_write ? "Allowed" : "Blocked";
-  elements.capSecrets.textContent = capabilities.secret_access ? "Allowed" : "Blocked";
+    : capabilityStatus(
+        capabilities.requested_tools.length > 0,
+        false,
+        securityBlocked,
+      );
+  elements.capNetwork.textContent = capabilityStatus(
+    capabilities.network_requested,
+    capabilities.network,
+    securityBlocked,
+  );
+  elements.capMemory.textContent = capabilityStatus(
+    capabilities.memory_write_requested,
+    capabilities.memory_write,
+    securityBlocked,
+  );
+  elements.capSecrets.textContent = capabilityStatus(
+    capabilities.secret_access_requested,
+    capabilities.secret_access,
+    securityBlocked,
+  );
 }
 
 function renderResult(result, elapsed) {
@@ -265,7 +292,7 @@ function renderResult(result, elapsed) {
   elements.pipelineTime.textContent = `${Math.round(elapsed)} ms`;
   elements.findingsCount.textContent = String(findings.length);
   elements.sanitizedContent.textContent = result.sanitized_text || "(No content returned)";
-  renderCapabilities(decision.capabilities);
+  renderCapabilities(decision.capabilities, decision.action);
   renderFindings(findings);
 }
 
@@ -289,6 +316,10 @@ async function inspect() {
       const form = new FormData();
       form.append("file", activeFile);
       form.append("source_trust", elements.trustSelect.value);
+      form.append("requested_tools", elements.requestTool.checked ? "search" : "");
+      form.append("network_requested", String(elements.requestNetwork.checked));
+      form.append("memory_write_requested", String(elements.requestMemory.checked));
+      form.append("secret_access_requested", String(elements.requestSecrets.checked));
       response = await fetch("/v1/content/inspect", {
         method: "POST",
         body: form,
@@ -301,6 +332,12 @@ async function inspect() {
           text: elements.content.value,
           source: currentMode,
           trust: elements.trustSelect.value,
+          requested_capabilities: {
+            tools: elements.requestTool.checked ? ["search"] : [],
+            network: elements.requestNetwork.checked,
+            memory_write: elements.requestMemory.checked,
+            secret_access: elements.requestSecrets.checked,
+          },
         }),
       });
     }
