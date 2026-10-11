@@ -1,0 +1,163 @@
+- generic [active] [ref=f2e1]:
+  - banner [ref=f2e2]:
+    - link "Sentinel home" [ref=f2e3] [cursor=pointer]:
+      - /url: /
+      - generic [ref=f2e8]:
+        - strong [ref=f2e9]: Sentinel
+        - generic [ref=f2e10]: Prompt Injection Firewall
+  - main [ref=f2e13]:
+    - generic [ref=f2e14]:
+      - generic [ref=f2e15]: Interactive security lab
+      - heading [level=1] [ref=f2e17]:
+        - text: Inspect content before
+        - emphasis [ref=f2e18]: AI trusts it.
+      - paragraph [ref=f2e19]: Send messages, code, documents, or images through a zero-trust inspection pipeline. See exactly what is detected, neutralized, and allowed.
+      - generic "Supported capabilities" [ref=f2e20]:
+        - generic [ref=f2e21]:
+          - strong [ref=f2e22]: "10"
+          - generic [ref=f2e23]: Threat classes
+        - generic [ref=f2e24]:
+          - strong [ref=f2e25]: 9+
+          - generic [ref=f2e26]: Input formats
+        - generic [ref=f2e27]:
+          - strong [ref=f2e28]: "4"
+          - generic [ref=f2e29]: Policy actions
+    - region "Firewall demonstration" [ref=f2e30]:
+      - generic [ref=f2e31]:
+        - generic [ref=f2e32]:
+          - generic [ref=f2e33]:
+            - generic [ref=f2e34]: 01 · Input
+            - heading "Content intake" [level=2] [ref=f2e35]
+          - button "Clear" [ref=f2e36] [cursor=pointer]
+        - tablist "Input type" [ref=f2e37]:
+          - tab "Message" [ref=f2e38] [cursor=pointer]
+          - tab "HTML" [ref=f2e39] [cursor=pointer]
+          - tab "Markdown" [ref=f2e40] [cursor=pointer]
+          - tab "API / JSON" [ref=f2e41] [cursor=pointer]
+          - tab "Code" [ref=f2e42] [cursor=pointer]
+          - tab "Upload" [selected] [ref=f2e43] [cursor=pointer]
+        - generic [ref=f2e111]:
+          - generic [ref=f2e112]: MD
+          - generic [ref=f2e113]:
+            - strong [ref=f2e114]: README.md
+            - generic [ref=f2e115]: text/markdown · 6.5 KB
+          - button "Remove selected file" [ref=f2e116] [cursor=pointer]: ×
+        - generic [ref=f2e62]:
+          - generic [ref=f2e63]:
+            - generic [ref=f2e64]: Content provenance
+            - strong [ref=f2e65]: External content · zero trust
+          - combobox "Content provenance" [ref=f2e66]:
+            - option "Authenticated user"
+            - option "External / untrusted" [selected]
+            - option "Verified internal"
+        - button "Run firewall inspection" [ref=f2e67] [cursor=pointer]
+      - generic [ref=f2e72]:
+        - generic [ref=f2e73]:
+          - generic [ref=f2e74]:
+            - generic [ref=f2e75]: 02 · Decision
+            - heading "Firewall response" [level=2] [ref=f2e76]
+          - generic "req-be8b7d9310044730a246120bce6f0abb" [ref=f2e117]
+        - generic [ref=f2e118]:
+          - generic [ref=f2e119]:
+            - generic [ref=f2e121]:
+              - strong [ref=f2e122]: "96"
+              - generic [ref=f2e123]: risk score
+            - generic [ref=f2e124]:
+              - generic [ref=f2e125]: Blocked
+              - heading "Prompt injection stopped" [level=3] [ref=f2e126]
+              - paragraph [ref=f2e127]: High-confidence malicious instructions were prevented from reaching the model.
+          - generic [ref=f2e128]:
+            - generic [ref=f2e129]:
+              - generic [ref=f2e130]: Enforcement pipeline
+              - generic [ref=f2e131]: 27 ms
+            - generic [ref=f2e132]:
+              - generic [ref=f2e133]:
+                - generic [ref=f2e134]: "1"
+                - generic [ref=f2e135]:
+                  - strong [ref=f2e136]: Extract
+                  - generic [ref=f2e137]: Content parsed
+              - generic [ref=f2e138]:
+                - generic [ref=f2e139]: "2"
+                - generic [ref=f2e140]:
+                  - strong [ref=f2e141]: Normalize
+                  - generic [ref=f2e142]: Encodings resolved
+              - generic [ref=f2e143]:
+                - generic [ref=f2e144]: "3"
+                - generic [ref=f2e145]:
+                  - strong [ref=f2e146]: Detect
+                  - generic [ref=f2e147]: 5 findings
+              - generic [ref=f2e148]:
+                - generic [ref=f2e149]: "4"
+                - generic [ref=f2e150]:
+                  - strong [ref=f2e151]: Enforce
+                  - generic [ref=f2e152]: Blocked
+          - generic [ref=f2e153]:
+            - generic [ref=f2e154]:
+              - generic [ref=f2e155]: ⌘
+              - generic [ref=f2e156]:
+                - generic [ref=f2e157]: Tools
+                - strong [ref=f2e158]: Disabled
+            - generic [ref=f2e159]:
+              - generic [ref=f2e160]: ◎
+              - generic [ref=f2e161]:
+                - generic [ref=f2e162]: Network
+                - strong [ref=f2e163]: Blocked
+            - generic [ref=f2e164]:
+              - generic [ref=f2e165]: ◇
+              - generic [ref=f2e166]:
+                - generic [ref=f2e167]: Memory write
+                - strong [ref=f2e168]: Blocked
+            - generic [ref=f2e169]:
+              - generic [ref=f2e170]: ◈
+              - generic [ref=f2e171]:
+                - generic [ref=f2e172]: Secret access
+                - strong [ref=f2e173]: Blocked
+          - generic [ref=f2e174]:
+            - generic [ref=f2e175]:
+              - generic [ref=f2e176]: Security findings
+              - generic [ref=f2e177]: "5"
+            - generic [ref=f2e178]:
+              - generic [ref=f2e179]:
+                - generic [ref=f2e181]:
+                  - strong [ref=f2e182]: instruction override
+                  - generic [ref=f2e183]: Attempts to override existing instructions. · original
+                - generic [ref=f2e184]: 91%
+              - generic [ref=f2e185]:
+                - generic [ref=f2e187]:
+                  - strong [ref=f2e188]: secret extraction
+                  - generic [ref=f2e189]: Requests disclosure of protected instructions or secrets. · original
+                - generic [ref=f2e190]: 96%
+              - generic [ref=f2e191]:
+                - generic [ref=f2e193]:
+                  - strong [ref=f2e194]: indirect prompt injection
+                  - generic [ref=f2e195]: Operational instructions were found in untrusted content. · original
+                - generic [ref=f2e196]: 93%
+              - generic [ref=f2e197]:
+                - generic [ref=f2e199]:
+                  - strong [ref=f2e200]: data exfiltration
+                  - generic [ref=f2e201]: Attempts to transmit data to an external destination. · original
+                - generic [ref=f2e202]: 94%
+              - generic [ref=f2e203]:
+                - generic [ref=f2e205]:
+                  - strong [ref=f2e206]: indirect prompt injection
+                  - generic [ref=f2e207]: Operational instructions were found in untrusted content. · original
+                - generic [ref=f2e208]: 96%
+          - group [ref=f2e209]:
+            - generic "Sanitized content View model-safe output" [ref=f2e210] [cursor=pointer]:
+              - generic [ref=f2e211]: Sanitized content
+              - generic [ref=f2e212]: View model-safe output
+    - region "Supported formats" [ref=f2e88]:
+      - generic [ref=f2e89]: Built for untrusted content from
+      - generic [ref=f2e90]:
+        - generic [ref=f2e91]: MSG
+        - generic [ref=f2e92]: HTML
+        - generic [ref=f2e93]: MD
+        - generic [ref=f2e94]: JSON
+        - generic [ref=f2e95]: CODE
+        - generic [ref=f2e96]: PDF
+        - generic [ref=f2e97]: DOCX
+        - generic [ref=f2e98]: EMAIL
+        - generic [ref=f2e99]: OCR
+  - contentinfo [ref=f2e100]:
+    - generic [ref=f2e101]: Zero-trust content inspection
+    - generic [ref=f2e102]: Detection is probabilistic. Enforcement is deterministic.

@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Interactive prompt injection firewall demonstration console"
+    >
+    <title>Sentinel · Prompt Injection Firewall</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Sentinel home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 28 32" role="img">
+            <path d="M14 1 26 6v8c0 8.3-5.1 14.1-12 17C7.1 28.1 2 22.3 2 14V6l12-5Z"></path>
+            <path d="m9 16 3.1 3L19 11"></path>
+          </svg>
+        </span>
+        <span>
+          <strong>Sentinel</strong>
+          <small>Prompt Injection Firewall</small>
+        </span>
+      </a>
+      <div class="topbar-status">
+        <span class="status-dot"></span>
+        <span>Gateway online</span>
+        <span class="version">v0.1</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow"><span></span> Interactive security lab</div>
+        <h1>Inspect content before<br><em>AI trusts it.</em></h1>
+        <p>
+          Send messages, code, documents, or images through a zero-trust
+          inspection pipeline. See exactly what is detected, neutralized, and allowed.
+        </p>
+        <div class="hero-stats" aria-label="Supported capabilities">
+          <div><strong>10</strong><span>Threat classes</span></div>
+          <div><strong>9+</strong><span>Input formats</span></div>
+          <div><strong>4</strong><span>Policy actions</span></div>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Firewall demonstration">
+        <div class="panel input-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="step-label">01 · Input</span>
+              <h2>Content intake</h2>
+            </div>
+            <button class="ghost-button" id="clear-button" type="button">
+              Clear
+            </button>
+          </div>
+
+          <div class="mode-tabs" role="tablist" aria-label="Input type">
+            <button class="mode-tab active" data-mode="message" role="tab" aria-selected="true">
+              Message
+            </button>
+            <button class="mode-tab" data-mode="html" role="tab" aria-selected="false">
+              HTML
+            </button>
+            <button class="mode-tab" data-mode="markdown" role="tab" aria-selected="false">
+              Markdown
+            </button>
+            <button class="mode-tab" data-mode="api_response" role="tab" aria-selected="false">
+              API / JSON
+            </button>
+            <button class="mode-tab" data-mode="source_code" role="tab" aria-selected="false">
+              Code
+            </button>
+            <button class="mode-tab" data-mode="file" role="tab" aria-selected="false">
+              Upload
+            </button>
+          </div>
+
+          <div id="text-input-view">
+            <div class="editor-shell">
+              <div class="editor-toolbar">
+                <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+                <span id="editor-label">user-message.txt</span>
+                <span class="editor-count" id="character-count">0 chars</span>
+              </div>
+              <textarea
+                id="content-input"
+                spellcheck="false"
+                aria-label="Content to inspect"
+                placeholder="Paste a user message or untrusted content here..."
+              ></textarea>
+            </div>
+
+            <div class="samples">
+              <span>Try a scenario</span>
+              <div class="sample-list">
+                <button type="button" data-sample="benign">Benign request</button>
+                <button type="button" data-sample="override">Instruction override</button>
+                <button type="button" data-sample="secret">Secret extraction</button>
+                <button type="button" data-sample="tool">Tool abuse</button>
+                <button type="button" data-sample="encoded">Encoded attack</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="file-input-view" class="hidden">
+            <input
+              id="file-input"
+              type="file"
+              accept=".txt,.md,.markdown,.html,.htm,.json,.eml,.pdf,.docx,.png,.jpg,.jpeg,.webp,.py,.js,.ts,.tsx,.java,.cs,.go,.rs,.sql,.xml,.yaml,.yml"
+              hidden
+            >
+            <button class="drop-zone" id="drop-zone" type="button">
+              <span class="upload-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"></path>
+                </svg>
+              </span>
+              <strong>Drop a file for inspection</strong>
+              <span>or click to browse</span>
+              <small>PDF, DOCX, image, email, HTML, Markdown, JSON, or source code · 10 MB max</small>
+            </button>
+            <div class="selected-file hidden" id="selected-file">
+              <div class="file-glyph" id="file-extension">PDF</div>
+              <div>
+                <strong id="file-name"></strong>
+                <span id="file-meta"></span>
+              </div>
+              <button type="button" id="remove-file" aria-label="Remove selected file">×</button>
+            </div>
+          </div>
+
+          <div class="trust-row">
+            <div>
+              <span class="field-label">Content provenance</span>
+              <strong id="trust-description">Authenticated user instruction</strong>
+            </div>
+            <select id="trust-select" aria-label="Content provenance">
+              <option value="authenticated_user_instruction">Authenticated user</option>
+              <option value="external_untrusted">External / untrusted</option>
+              <option value="verified_internal_data">Verified internal</option>
+            </select>
+          </div>
+
+          <button class="inspect-button" id="inspect-button" type="button">
+            <span class="button-content">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 20 6.5V12c0 5.2-3.2 8.8-8 10-4.8-1.2-8-4.8-8-10V6.5L12 3Z"></path>
+                <path d="m8.5 12.2 2.2 2.2 4.8-5"></path>
+              </svg>
+              Run firewall inspection
+            </span>
+            <span class="button-loading">
+              <i></i> Inspecting content
+            </span>
+          </button>
+          <p class="input-error hidden" id="input-error" role="alert"></p>
+        </div>
+
+        <div class="panel results-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="step-label">02 · Decision</span>
+              <h2>Firewall response</h2>
+            </div>
+            <span class="request-id" id="request-id">Awaiting inspection</span>
+          </div>
+
+          <div class="empty-state" id="empty-state">
+            <div class="radar">
+              <span></span><span></span><span></span>
+              <i></i>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 20 6.5V12c0 5.2-3.2 8.8-8 10-4.8-1.2-8-4.8-8-10V6.5L12 3Z"></path>
+              </svg>
+            </div>
+            <h3>Ready to inspect</h3>
+            <p>Choose an input type and submit content to visualize the firewall decision.</p>
+          </div>
+
+          <div class="results-content hidden" id="results-content">
+            <div class="decision-summary">
+              <div class="risk-gauge" id="risk-gauge">
+                <div class="gauge-inner">
+                  <strong id="risk-value">0</strong>
+                  <span>risk score</span>
+                </div>
+              </div>
+              <div class="decision-copy">
+                <span class="decision-badge" id="decision-badge">Allowed</span>
+                <h3 id="decision-title">Content is safe to process</h3>
+                <p id="decision-description">No operational attack patterns were detected.</p>
+              </div>
+            </div>
+
+            <div class="pipeline-card">
+              <div class="section-title">
+                <span>Enforcement pipeline</span>
+                <small id="pipeline-time">Completed</small>
+              </div>
+              <div class="pipeline">
+                <div class="pipeline-step">
+                  <i>1</i><div><strong>Extract</strong><span>Content parsed</span></div>
+                </div>
+                <div class="pipeline-line"></div>
+                <div class="pipeline-step">
+                  <i>2</i><div><strong>Normalize</strong><span>Encodings resolved</span></div>
+                </div>
+                <div class="pipeline-line"></div>
+                <div class="pipeline-step">
+                  <i>3</i><div><strong>Detect</strong><span id="detection-count">0 findings</span></div>
+                </div>
+                <div class="pipeline-line"></div>
+                <div class="pipeline-step policy-step">
+                  <i>4</i><div><strong>Enforce</strong><span id="enforcement-action">Allowed</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="capability-grid">
+              <div class="capability">
+                <span class="capability-icon">⌘</span>
+                <div><small>Tools</small><strong id="cap-tools">Disabled</strong></div>
+              </div>
+              <div class="capability">
+                <span class="capability-icon">◎</span>
+                <div><small>Network</small><strong id="cap-network">Blocked</strong></div>
+              </div>
+              <div class="capability">
+                <span class="capability-icon">◇</span>
+                <div><small>Memory write</small><strong id="cap-memory">Blocked</strong></div>
+              </div>
+              <div class="capability">
+                <span class="capability-icon">◈</span>
+                <div><small>Secret access</small><strong id="cap-secrets">Blocked</strong></div>
+              </div>
+            </div>
+
+            <div class="findings-section">
+              <div class="section-title">
+                <span>Security findings</span>
+                <span class="count-badge" id="findings-count">0</span>
+              </div>
+              <div id="findings-list" class="findings-list"></div>
+            </div>
+
+            <details class="sanitized-section">
+              <summary>
+                <span>Sanitized content</span>
+                <span>View model-safe output</span>
+              </summary>
+              <pre id="sanitized-content"></pre>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="format-strip" aria-label="Supported formats">
+        <span>Built for untrusted content from</span>
+        <div>
+          <i>MSG</i><i>HTML</i><i>MD</i><i>JSON</i><i>CODE</i>
+          <i>PDF</i><i>DOCX</i><i>EMAIL</i><i>OCR</i>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Zero-trust content inspection</span>
+      <span>Detection is probabilistic. Enforcement is deterministic.</span>
+    </footer>
+  </body>
+</html>
